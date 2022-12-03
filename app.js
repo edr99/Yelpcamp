@@ -28,7 +28,6 @@ main().catch((err) => console.log(err));
 async function main() {
   await mongoose.connect(url, {
     useNewUrlParser: true,
-    useCreateIndex: true,
     useUnifiedTopology: true,
     useUnifiedTopology: true,
   });
@@ -45,7 +44,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(mongoSanitize());
 
 const sessionConfig = {
-  secret: SECRET,
+  secret: process.env.SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: {
