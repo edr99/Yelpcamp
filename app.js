@@ -21,11 +21,15 @@ const campgroundsRoutes = require("./routes/campgrounds");
 const reviewsRoutes = require("./routes/reviews");
 const mongoSanitize = require("express-mongo-sanitize");
 const helmet = require("helmet");
+const url = process.env.DB_URL || "mongodb://127.0.0.1:27017/yelp-camp";
+
 main().catch((err) => console.log(err));
 
 async function main() {
-  await mongoose.connect("mongodb://127.0.0.1:27017/yelp-camp", {
+  await mongoose.connect(url, {
     useNewUrlParser: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true,
     useUnifiedTopology: true,
   });
   console.log("mongo connected");
@@ -41,7 +45,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(mongoSanitize());
 
 const sessionConfig = {
-  secret: "notagoodsecret",
+  secret: SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: {
