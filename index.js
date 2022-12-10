@@ -22,6 +22,7 @@ const reviewsRoutes = require("./routes/reviews");
 const mongoSanitize = require("express-mongo-sanitize");
 const helmet = require("helmet");
 const url = process.env.DB_URL || "mongodb://127.0.0.1:27017/yelp-camp";
+const MongoDBStore = require("connect-mongo")(session);
 
 main().catch((err) => console.log(err));
 
@@ -43,7 +44,18 @@ app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(mongoSanitize());
 
+const store = new MongoDBStore({
+  url: url,
+  secret: process.env.SECRET,
+  touchAfter: 24 * 60 * 60,
+});
+
+store.on("error", function (e) {
+  console.log("session store error", e);
+});
+
 const sessionConfig = {
+  store,
   secret: process.env.SECRET,
   resave: false,
   saveUninitialized: true,
