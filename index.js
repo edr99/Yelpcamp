@@ -44,18 +44,7 @@ app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(mongoSanitize());
 
-const store = new MongoDBStore({
-  url: url,
-  secret: process.env.SECRET,
-  touchAfter: 24 * 60 * 60,
-});
-
-store.on("error", function (e) {
-  console.log("session store error", e);
-});
-
 const sessionConfig = {
-  store,
   secret: process.env.SECRET,
   resave: false,
   saveUninitialized: true,
