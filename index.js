@@ -22,7 +22,6 @@ const reviewsRoutes = require("./routes/reviews");
 const mongoSanitize = require("express-mongo-sanitize");
 const helmet = require("helmet");
 const url = process.env.DB_URL || "mongodb://127.0.0.1:27017/yelp-camp";
-const MongoDBStore = require("connect-mongo")(session);
 
 main().catch((err) => console.log(err));
 
