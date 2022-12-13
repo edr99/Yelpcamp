@@ -15,18 +15,18 @@ const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStragedy = require("passport-local");
 const User = require("./models/user");
-const MongoDBStore = require("connect-mongo");
+const MongoStore = require("connect-mongo").default;
 const userRoutes = require("./routes/users");
 const campgroundsRoutes = require("./routes/campgrounds");
 const reviewsRoutes = require("./routes/reviews");
 const mongoSanitize = require("express-mongo-sanitize");
 const helmet = require("helmet");
-const url = process.env.DB_URL || "mongodb://127.0.0.1:27017/yelp-camp";
+const dbUrl = process.env.DB_URL || "mongodb://127.0.0.1:27017/yelp-camp";
 
 main().catch((err) => console.log(err));
 
 async function main() {
-  await mongoose.connect(url, {
+  await mongoose.connect(dbUrl, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
@@ -42,8 +42,8 @@ app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(mongoSanitize());
 
-const store = new MongoDBStore({
-  url: url,
+const store = new MongoStore({
+  mongoUrl: dbUrl,
   secret: process.env.SECRET,
   touchAfter: 24 * 60 * 60,
 });
@@ -53,7 +53,7 @@ store.on("error", function (e) {
 });
 
 const sessionConfig = {
-  store,
+  store: store,
   secret: process.env.SECRET,
   resave: false,
   saveUninitialized: true,
