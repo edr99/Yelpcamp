@@ -15,7 +15,7 @@ const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStragedy = require("passport-local");
 const User = require("./models/user");
-const MongoDBStore = require("connect-mongo")(session);
+const MongoDBStore = require("connect-mongo");
 const userRoutes = require("./routes/users");
 const campgroundsRoutes = require("./routes/campgrounds");
 const reviewsRoutes = require("./routes/reviews");
@@ -28,7 +28,6 @@ main().catch((err) => console.log(err));
 async function main() {
   await mongoose.connect(url, {
     useNewUrlParser: true,
-    useUnifiedTopology: true,
     useUnifiedTopology: true,
   });
   console.log("mongo connected");
